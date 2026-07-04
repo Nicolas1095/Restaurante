@@ -9,9 +9,9 @@ class Restaurante:
         #Añade a la lista menú el producto que se le pasa por el parametro
         self.menu.append(producto)
 
-    def registrar_cliente(self, cliente) -> None:
+   # def registrar_cliente(self, cliente) -> None:
         #Añade a la lista clientes el cliente que se le pasa por el parametro
-        self.clientes.append(cliente)
+    #    self.clientes.append(cliente)"""
 
     def mostrar_menu(self) -> None:
         print("-" * 30)
@@ -20,10 +20,11 @@ class Restaurante:
         for producto in self.menu:
             print(producto)
         print("-" * 30)
-    def mostrar_clientes(self) -> None:
-        print("-" * 30)
-        print("Clientes registrados:")
-        #recorre la lista de clientes que hay en la lista clientes y los muestra
-        for cliente in self.clientes:
-            print(cliente)
-        print("-" * 30)
+
+    # def mostrar_clientes(self) -> None:
+    #     print("-" * 30)
+    #     print("Clientes registrados:")
+    #     #recorre la lista de clientes que hay en la lista clientes y los muestra
+    #     for cliente in self.clientes:
+    #         print(cliente)
+    #    print("-" * 30)
