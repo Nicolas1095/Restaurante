@@ -3,11 +3,27 @@ class Producto:
         self.nombre = nombre
         self.__precio = precio
     # Cuando se imprima un producto, se mostrará como string el nombre y el precio del producto
-    def obtener_precio(self) -> float:
-        return self.__precio
+    @property
+    def nombre(self):
+        return self.__nombre
     
-    def cambiar_precio(self, precio: float) -> None:
+    @nombre.setter
+    def nombre(self, nombre):
+        if not nombre:
+            raise ValueError("El nombre no puede estar vacío.")
+        self.__nombre = nombre
+
+    @property
+    def precio(self):
+        return self.__precio   
+    
+    @precio.setter
+    def precio(self, precio):
+        if precio < 0:
+            raise ValueError("El precio no puede ser negativo.")
         self.__precio = precio
 
-    def __str__(self) -> str:
-        return f"{self.nombre} - ${self.__precio:.2f}"
+    def mostrar_informacion(self) -> str:
+        return f"{self.nombre} - ${self.precio:.2f}"
+    
+    
