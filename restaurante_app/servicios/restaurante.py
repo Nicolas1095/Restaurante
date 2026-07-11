@@ -38,6 +38,6 @@ class Restaurante:
     def buscar_cliente(self, nombre: str):
         #Busca un cliente en la lista clientes que tenga el mismo nombre que el parametro y lo devuelve, si no lo encuentra devuelve None
         for cliente in self.clientes:
-            if cliente.nombre.lower() == nombre.lower:
+            if cliente.nombre.lower() == nombre.lower():
                 return cliente
         return None

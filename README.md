@@ -1,6 +1,6 @@
 # restaurante_app
 
-## Nicolas Galarraga
+##Nicolas Galarraga
 
 ## Descripción del sistema
 

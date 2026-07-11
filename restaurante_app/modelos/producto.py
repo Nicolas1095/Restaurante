@@ -2,11 +2,10 @@ class Producto:
     def __init__(self, nombre: str, precio: float):
         self.nombre = nombre
         self.__precio = precio
-    # Cuando se imprima un producto, se mostrará como string el nombre y el precio del producto
     @property
     def nombre(self):
         return self.__nombre
-    
+
     @nombre.setter
     def nombre(self, nombre):
         if not nombre:
@@ -25,5 +24,3 @@ class Producto:
 
     def mostrar_informacion(self) -> str:
         return f"{self.nombre} - ${self.precio:.2f}"
-    
-    
