@@ -1,4 +1,4 @@
-from POO.restaurante_app.restaurante_app.modelos.bebida import Bebida
+from modelos.bebida import Bebida
 from modelos.producto import Producto
 from modelos.cliente import Cliente
 from servicios.restaurante import Restaurante
@@ -10,11 +10,11 @@ producto2 = Producto("Pizza", 12.99)
 restaurante.agregar_producto(producto2)
 producto3 = Producto("Ensalada", 8.99)
 restaurante.agregar_producto(producto3)
-bebida1 = Producto("Coca-Cola", 2.99)
+bebida1 = Bebida("Coca-Cola", 2.99, 500)
 restaurante.agregar_producto(bebida1)
-bebida2 = Producto("Agua", 1.99)
+bebida2 = Bebida("Agua", 1.99, 500)
 restaurante.agregar_producto(bebida2)
-bebida3 = Producto("Jugo", 3.99)
+bebida3 = Bebida("Jugo", 3.99, 500)
 restaurante.agregar_producto(bebida3)
 
 cliente1 = Cliente("Juan Pérez", "1234567890")
