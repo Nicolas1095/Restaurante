@@ -1,36 +1,47 @@
 # restaurante_app
 
-## Nicolas Galarraga
+## Nicolás Galarraga
 
 ## Descripción del sistema
 
-restaurante_app es una aplicación de gestión básica para un restaurante. El sistema permite registrar clientes, definir productos y bebidas del menú, mostrar el menú, y buscar productos y clientes mediante un menú interactivo en consola.
+restaurante_app es una aplicación de consola para gestionar un restaurante de forma básica. Permite registrar productos, buscarlos, actualizarlos, eliminarlos, listarlos, además de registrar usuarios y ver la lista de usuarios y categorías disponibles.
 
 ## Estructura del proyecto
 
-La organización del proyecto está diseñada para separar responsabilidades y facilitar su mantenimiento:
+La organización del proyecto está diseñada para separar responsabilidades:
 
-- `restaurante_app/main.py`: archivo principal que inicia la aplicación y ejecuta el menú interactivo.
-- `restaurante_app/modelos/`: carpeta con las clases del dominio.
-  - `producto.py`: contiene la clase `Producto`, con validaciones de nombre y precio.
-  - `bebida.py`: contiene la clase `Bebida`, que hereda de `Producto` e incluye el volumen.
-  - `cliente.py`: contiene la clase `Cliente`, con validaciones de nombre y teléfono.
-- `restaurante_app/servicios/`: carpeta con la lógica de gestión del restaurante.
-  - `restaurante.py`: contiene la clase `Restaurante`, que administra el menú y los clientes.
-- `README.md`: documentación del proyecto.
+- [restaurante_app/main.py](restaurante_app/main.py): archivo principal que ejecuta el menú interactivo de la aplicación.
+- [restaurante_app/modelos/](restaurante_app/modelos): carpeta con las clases del dominio.
+  - [restaurante_app/modelos/producto.py](restaurante_app/modelos/producto.py): define la clase `Producto` con validaciones para código, nombre, categoría y precio.
+  - [restaurante_app/modelos/usuario.py](restaurante_app/modelos/usuario.py): define la clase `Usuario` con validaciones de nombre y teléfono.
+- [restaurante_app/servicios/](restaurante_app/servicios): carpeta con la lógica de negocio del restaurante.
+  - [restaurante_app/servicios/restaurante.py](restaurante_app/servicios/restaurante.py): contiene la clase `Restaurante`, que administra la lista de productos y usuarios.
+- [README.md](README.md): documentación del proyecto.
 
-## Características principales
+## Funcionalidades principales
 
-- Registrar productos y bebidas con validaciones.
-- Registrar clientes.
-- Mostrar el menú completo de productos y bebidas.
-- Buscar productos por nombre.
-- Mostrar clientes registrados.
-- Buscar clientes por nombre.
+- Registrar productos con código, nombre, precio y categoría.
+- Buscar un producto por nombre.
+- Actualizar la información de un producto.
+- Eliminar productos del menú.
+- Listar todos los productos registrados.
+- Registrar usuarios con nombre y teléfono.
+- Listar usuarios registrados.
+- Mostrar las categorías disponibles entre los productos.
+- Salir de la aplicación.
 
 ## Clases principales
 
-- `Producto`: modelo básico de producto con `nombre` y `precio`.
-- `Bebida`: extiende `Producto` y agrega el atributo `volumen`.
-- `Cliente`: modelo de cliente con `nombre` y `telefono`.
-- `Restaurante`: servicio que administra el menú y la lista de clientes.
+- `Producto`: representa un producto del menú con atributos como `codigo`, `nombre`, `precio` y `categoria`.
+- `Usuario`: representa a un cliente o usuario registrado con `nombre` y `telefono`.
+- `Restaurante`: administra los productos y usuarios del restaurante.
+
+## Ejecución
+
+Para iniciar la aplicación, se ejecuta desde la carpeta raíz:
+
+```bash
+python restaurante_app/main.py
+```
+
+> La aplicación corre en consola y muestra un menú con opciones numéricas para gestionar el restaurante.
