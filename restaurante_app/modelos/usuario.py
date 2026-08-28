@@ -1,7 +1,21 @@
 class Usuario:
-    def __init__(self, nombre: str, telefono: str):
+    def __init__(self, identificacion: str, nombre: str | None = None, telefono: str | None = None):
+        if telefono is None:
+            telefono = nombre
+            nombre = identificacion
+        self.identificacion = identificacion
         self.nombre = nombre
         self.telefono = telefono
+
+    @property
+    def identificacion(self) -> str:
+        return self.__identificacion
+
+    @identificacion.setter
+    def identificacion(self, identificacion: str) -> None:
+        if not identificacion:
+            raise ValueError("La identificación no puede estar vacía.")
+        self.__identificacion = identificacion
 
     @property
     def nombre(self):

@@ -1,9 +1,17 @@
 class Producto:
-    def __init__(self, codigo: str, nombre: str, precio: float, categoria: str):
+    def __init__(
+        self,
+        codigo: str,
+        nombre: str,
+        precio: float,
+        categoria: str,
+        stock: int = 0,
+    ):
         self.codigo = codigo
         self.nombre = nombre
         self.precio = precio
         self.categoria = categoria
+        self.stock = stock
 
     @property
     def codigo(self):
@@ -45,8 +53,25 @@ class Producto:
             raise ValueError("El precio no puede ser negativo.")
         self.__precio = precio
 
+    @property
+    def stock(self) -> int:
+        return self.__stock
+
+    @stock.setter
+    def stock(self, stock: int) -> None:
+        if not isinstance(stock, int) or isinstance(stock, bool) or stock < 0:
+            raise ValueError("El stock debe ser un entero no negativo.")
+        self.__stock = stock
+
     def mostrar_informacion(self) -> str:
-        return f"{self.nombre} - ${self.precio:.2f}"
+        return f"{self.nombre} - ${self.precio:.2f} - Stock: {self.stock}"
+
+    def vender(self, cantidad: int) -> None:
+        if not isinstance(cantidad, int) or isinstance(cantidad, bool) or cantidad <= 0:
+            raise ValueError("La cantidad debe ser un entero mayor que cero.")
+        if cantidad > self.stock:
+            raise ValueError("No hay stock suficiente.")
+        self.stock -= cantidad
     
     def actualizar_informacion(self, nombre: str, precio: float) -> None:
         self.nombre = nombre

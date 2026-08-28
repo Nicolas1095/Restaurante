@@ -1,8 +1,9 @@
-from servicios.restaurante import Restaurante
 from modelos.producto import Producto
 from modelos.usuario import Usuario
+from servicios.restaurante import Restaurante
 
-restaurante = Restaurante("Restaurante de Nicolás")
+
+restaurante = Restaurante("Restaurante de Nicolas")
 
 OPCIONES_MENU = (
     "Registrar producto",
@@ -12,118 +13,102 @@ OPCIONES_MENU = (
     "Listar productos",
     "Registrar usuario",
     "Listar usuarios",
-    "Mostrar categorías",
+    "Mostrar categorias",
+    "Vender producto",
+    "Consultar ventas de usuario",
     "Salir",
 )
 
-# Muestra el menú de opciones en bucle hasta que el usuario salga del programa
+
 while True:
-    print("")
-    print("=" * 40)
+    print("\n" + "=" * 40)
     print(f"  Bienvenido al {restaurante.nombre}")
     print("=" * 40)
-    print("Menú de opciones:")
+    for numero, opcion_menu in enumerate(OPCIONES_MENU, start=1):
+        print(f"{numero}. {opcion_menu}")
 
-    for i, opcion in enumerate(OPCIONES_MENU, start=1):
-        print(f"{i}. {opcion}")
-        if i == 5 or i == 7:
-            print("-" * 40)
+    opcion = input("Seleccione una opcion: ")
 
-    opcion = input("Seleccione una opción: ")
+    try:
+        if opcion == "1":
+            codigo = input("Ingrese el codigo del producto: ")
+            nombre = input("Ingrese el nombre del producto: ")
+            precio = float(input("Ingrese el precio del producto: "))
+            categoria = input("Ingrese la categoria del producto: ")
+            stock = int(input("Ingrese el stock disponible: "))
+            restaurante.agregar_producto(Producto(codigo, nombre, precio, categoria, stock))
+            print(f"Producto {nombre} registrado exitosamente.")
 
-    # 1. Registrar producto
-    if opcion == "1":
-        codigo = input("Ingrese el código del producto: ")
-        nombre = input("Ingrese el nombre del producto: ")
-        precio = float(input("Ingrese el precio del producto: "))
-        categoria = input("Ingrese la categoría del producto: ")
+        elif opcion == "2":
+            producto = restaurante.buscar_producto(input("Ingrese codigo o nombre: "))
+            print(producto.mostrar_informacion() if producto else "Producto no encontrado.")
 
-        restaurante.agregar_producto(
-            Producto(codigo, nombre, precio, categoria)
-        )
-        print(f"Producto {nombre} registrado exitosamente.")
+        elif opcion == "3":
+            producto = restaurante.buscar_producto(input("Ingrese codigo o nombre: "))
+            if producto:
+                nuevo_nombre = input("Ingrese el nuevo nombre: ")
+                nuevo_precio = float(input("Ingrese el nuevo precio: "))
+                restaurante.actualizar_producto(producto, nuevo_nombre, nuevo_precio)
+                print("Producto actualizado.")
+            else:
+                print("Producto no encontrado.")
 
-    # 2. Buscar producto
-    elif opcion == "2":
-        nombre = input("Ingrese el nombre del producto a buscar: ")
+        elif opcion == "4":
+            producto = restaurante.buscar_producto(input("Ingrese codigo o nombre: "))
+            if producto:
+                restaurante.eliminar_producto(producto)
+                print("Producto eliminado.")
+            else:
+                print("Producto no encontrado.")
 
-        producto_encontrado = restaurante.buscar_producto(nombre)
+        elif opcion == "5":
+            restaurante.mostrar_menu()
 
-        if producto_encontrado:
+        elif opcion == "6":
+            identificacion = input("Ingrese la identificacion del usuario: ")
+            nombre = input("Ingrese el nombre del usuario: ")
+            telefono = input("Ingrese el telefono del usuario: ")
+            restaurante.registrar_usuario(Usuario(identificacion, nombre, telefono))
+            print(f"Usuario {nombre} registrado exitosamente.")
+
+        elif opcion == "7":
+            restaurante.mostrar_usuarios()
+
+        elif opcion == "8":
+            categorias = sorted({producto.categoria for producto in restaurante.productos})
             print(
-                f"Producto encontrado: "
-                f"{producto_encontrado.mostrar_informacion()}"
-            )
-        else:
-            print("Producto no encontrado.")
-
-    # 3. Actualizar producto
-    elif opcion == "3":
-        nombre = input("Ingrese el nombre del producto a actualizar: ")
-
-        producto_encontrado = restaurante.buscar_producto(nombre)
-
-        if producto_encontrado:
-            nuevo_nombre = input("Ingrese el nuevo nombre del producto: ")
-            nuevo_precio = float(input("Ingrese el nuevo precio del producto: "))
-
-            producto_encontrado.actualizar_informacion(
-                nuevo_nombre,
-                nuevo_precio
+                "\n".join(
+                    f"{numero}. {categoria}"
+                    for numero, categoria in enumerate(categorias, start=1)
+                )
+                or "No hay categorias registradas."
             )
 
-            print(f"Producto {nombre} actualizado.")
+        elif opcion == "9":
+            identificacion = input("Ingrese la identificacion del usuario: ")
+            codigo = input("Ingrese el codigo del producto: ")
+            cantidad = int(input("Ingrese la cantidad: "))
+            if restaurante.vender_producto(codigo, identificacion, cantidad):
+                print("Venta registrada correctamente.")
+            else:
+                print("Venta rechazada: verifique usuario, producto, cantidad y stock.")
+
+        elif opcion == "10":
+            identificacion = input("Ingrese la identificacion del usuario: ")
+            ventas = restaurante.ventas_de_usuario(identificacion)
+            if ventas:
+                for venta in ventas:
+                    producto = restaurante.buscar_producto(venta.producto_codigo)
+                    nombre = producto.nombre if producto else "Producto no disponible"
+                    print(f"{nombre} ({venta.producto_codigo}): {venta.cantidad}")
+            else:
+                print("No hay ventas para ese usuario.")
+
+        elif opcion == "11":
+            print("Saliendo del programa.")
+            break
+
         else:
-            print("Producto no encontrado.")
-
-    # 4. Eliminar producto
-    elif opcion == "4":
-        nombre = input("Ingrese el nombre del producto a eliminar: ")
-
-        producto_encontrado = restaurante.buscar_producto(nombre)
-
-        if producto_encontrado:
-            restaurante.eliminar_producto(producto_encontrado)
-            print(f"Producto {nombre} eliminado.")
-        else:
-            print("Producto no encontrado.")
-
-    # 5. Listar productos
-    elif opcion == "5":
-        restaurante.mostrar_menu()
-
-    # 6. Registrar usuario
-    elif opcion == "6":
-        nombre = input("Ingrese el nombre del usuario: ")
-        telefono = input("Ingrese el teléfono del usuario: ")
-
-        restaurante.registrar_usuario(
-            Usuario(nombre, telefono)
-        )
-        print(f"Usuario {nombre} registrado exitosamente.")
-
-    # 7. Listar usuarios
-    elif opcion == "7":
-        restaurante.mostrar_usuarios()
-
-    # 8. Mostrar categorías
-    elif opcion == "8":
-        categorias = set()
-        for producto in restaurante.productos:
-            categorias.add(producto.categoria)
-        
-        if categorias:
-            print("\nCategorías disponibles:")
-            for i, categoria in enumerate(sorted(categorias), start=1):
-                print(f"{i}. {categoria}")
-        else:
-            print("No hay categorías registradas.")
-
-    # 9. Salir
-    elif opcion == "9":
-        print("Saliendo del programa.")
-        break
-
-    # Opción inválida
-    else:
-        print("Opción no válida. Intente nuevamente.")
+            print("Opcion no valida. Intente nuevamente.")
+    except (ValueError, RuntimeError) as error:
+        print(f"Operacion no realizada: {error}")
