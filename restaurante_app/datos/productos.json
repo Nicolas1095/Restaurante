@@ -1,1 +1,16 @@
-[]
+[
+    {
+        "codigo": "P001",
+        "nombre": "Hamburguesa",
+        "precio": 50000,
+        "categoria": "Comida Rápida",
+        "stock": 8
+    },
+    {
+        "codigo": "P002",
+        "nombre": "Pizza",
+        "precio": 60000,
+        "categoria": "Comida Rápida",
+        "stock": 7
+    }
+]
