@@ -13,12 +13,28 @@ sys.path.insert(0, str(Path(__file__).parent))
 from restaurante_app.modelos.producto import Producto
 from restaurante_app.modelos.usuario import Usuario
 from restaurante_app.servicios.restaurante import Restaurante
+from restaurante_app.servicios.archivo_servicio import ArchivoServicio
+
+
+def limpiar_datos():
+    """Limpia los archivos JSON para comenzar con datos frescos"""
+    directorio = Path(__file__).parent / "restaurante_app" / "datos"
+    archivos = ["productos.json", "usuarios.json", "ventas.json"]
+    
+    for archivo in archivos:
+        ruta = directorio / archivo
+        if ruta.exists():
+            ruta.write_text("[]", encoding="utf-8")
+    print("[SETUP] Datos JSON limpiados")
 
 
 def test_restaurant_app():
     print("=" * 60)
     print("PRUEBAS DE OPTIMIZACIÓN - SEMANA 12")
     print("=" * 60)
+    
+    # Limpiar datos previos
+    limpiar_datos()
     
     # Crear instancia del restaurante
     restaurante = Restaurante("Restaurante de Prueba")

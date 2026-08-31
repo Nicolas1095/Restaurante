@@ -119,7 +119,7 @@ class Restaurante:
         venta = Venta(usuario.identificacion, producto.codigo, cantidad)
         producto.vender(cantidad)
         self.__ventas.append(venta)
-        # Sincronizar índice de ventas por usuario
+        # Sincronizar índice de ventas por usuario (usar la identificacion del objeto usuario, no del parámetro)
         usuario_id_lower = usuario.identificacion.lower()
         if usuario_id_lower not in self.__indice_ventas_por_usuario:
             self.__indice_ventas_por_usuario[usuario_id_lower] = []
