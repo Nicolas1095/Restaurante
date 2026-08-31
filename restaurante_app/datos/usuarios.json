@@ -1,12 +1,17 @@
 [
     {
-        "identificacion": "12345",
-        "nombre": "Juan Pérez",
-        "telefono": "3001234567"
+        "identificacion": "1001",
+        "nombre": "Carlos López",
+        "telefono": "3001111111"
     },
     {
-        "identificacion": "67890",
-        "nombre": "María García",
-        "telefono": "3007654321"
+        "identificacion": "1002",
+        "nombre": "Ana Martínez",
+        "telefono": "3002222222"
+    },
+    {
+        "identificacion": "1003",
+        "nombre": "Pedro Sánchez",
+        "telefono": "3003333333"
     }
 ]

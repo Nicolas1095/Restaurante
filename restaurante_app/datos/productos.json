@@ -1,16 +1,23 @@
 [
     {
         "codigo": "P001",
-        "nombre": "Hamburguesa",
-        "precio": 50000,
-        "categoria": "Comida Rápida",
-        "stock": 8
+        "nombre": "Hamburgesa Premium XL",
+        "precio": 95000,
+        "categoria": "Carnes",
+        "stock": 13
     },
     {
         "codigo": "P002",
-        "nombre": "Pizza",
-        "precio": 60000,
-        "categoria": "Comida Rápida",
-        "stock": 7
+        "nombre": "Pizza Margarita",
+        "precio": 65000,
+        "categoria": "Pizzas",
+        "stock": 10
+    },
+    {
+        "codigo": "P003",
+        "nombre": "Pasta Carbonara",
+        "precio": 55000,
+        "categoria": "Pastas",
+        "stock": 17
     }
 ]
