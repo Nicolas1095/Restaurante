@@ -9,7 +9,8 @@ consultar usuarios y gestionar productos con persistencia en archivos JSON.
 - `restaurante_app/modelos/`: modelos `Producto` y `Usuario`.
 - `restaurante_app/servicios/archivo_servicio.py`: lectura y escritura de JSON.
 - `restaurante_app/servicios/restaurante_servicio.py`: valida el acceso y
-  centraliza la consulta, registro, actualización y eliminación de productos.
+  centraliza la consulta, registro, actualización y eliminación de productos
+  y usuarios.
 - `restaurante_app/datos/`: `productos.json`, `usuarios.json` y `ventas.json`.
 - `restaurante_app/ui/login_view.py`: pantalla de usuario, contraseña y
   mensajes de validación.
@@ -34,8 +35,9 @@ o nombre, actualizar y eliminar. Cada acción usa `command=` y delega las
 validaciones y la persistencia a `RestauranteServicio`; la vista no manipula
 directamente los archivos JSON. La tabla se actualiza después de cada cambio.
 
-El acceso permite seleccionar o escribir cualquier usuario registrado y
-muestra la contraseña predeterminada `1234`, que aparece precargada. Los
+El acceso utiliza un formulario normal para escribir la identificación y la
+contraseña. El login muestra como referencia la contraseña predeterminada
+`1234`, pero ambos campos se ingresan manualmente. Los
 códigos de producto se generan automáticamente con el
 formato `P001`, `P002`, etc.; para actualizar o eliminar un producto se
 selecciona primero en la tabla y se carga en el formulario.
