@@ -1,0 +1,23 @@
+[
+    {
+        "codigo": "P001",
+        "nombre": "Hamburgesa Premium XL",
+        "precio": 95000,
+        "categoria": "Carnes",
+        "stock": 13
+    },
+    {
+        "codigo": "P002",
+        "nombre": "Pizza Margarita",
+        "precio": 65000,
+        "categoria": "Pizzas",
+        "stock": 10
+    },
+    {
+        "codigo": "P004",
+        "nombre": "Hot Dog Completo",
+        "precio": 45000.0,
+        "categoria": "Carne",
+        "stock": 32
+    }
+]
