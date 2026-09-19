@@ -14,10 +14,10 @@
         "stock": 10
     },
     {
-        "codigo": "P003",
-        "nombre": "Pasta Carbonara",
-        "precio": 55000,
-        "categoria": "Pastas",
-        "stock": 17
+        "codigo": "P004",
+        "nombre": "Hot Dog Completo",
+        "precio": 45000.0,
+        "categoria": "Carnes",
+        "stock": 32
     }
 ]
