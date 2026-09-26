@@ -9,9 +9,10 @@ except ImportError:
 
 
 class MainView(ttk.Frame):
-    def __init__(self, master: tk.Misc, servicio: RestauranteServicio, on_logout: Callable[[], None]) -> None:
+    def __init__(self, master: tk.Misc, servicio: RestauranteServicio, identificacion_usuario: str, on_logout: Callable[[], None]) -> None:
         super().__init__(master, padding=18)
         self._servicio = servicio
+        self._usuario_id_actual = identificacion_usuario
         self._on_logout = on_logout
         self._codigo = tk.StringVar()
         self._nombre = tk.StringVar()
@@ -22,6 +23,7 @@ class MainView(ttk.Frame):
         self._identificacion_usuario = tk.StringVar()
         self._nombre_usuario = tk.StringVar()
         self._telefono_usuario = tk.StringVar()
+        self._vender_estado = False
         self._codigo.set(self._servicio.siguiente_codigo_producto())
         self._construir()
 
@@ -40,6 +42,9 @@ class MainView(ttk.Frame):
         ttk.Button(navegacion, text="Usuarios", command=self._mostrar_usuarios).pack(
             side="left", padx=6
         )
+        ttk.Button(navegacion, text="Ventas", command=self._mostrar_ventas).pack(
+            side="left", padx=6
+        )
         ttk.Button(navegacion, text="Cerrar sesión", command=self._on_logout).pack(
             side="right"
         )
@@ -55,12 +60,13 @@ class MainView(ttk.Frame):
             widget.destroy()
 
     def _mostrar_productos(self) -> None:
+        self._vender_estado = False
         self._limpiar_contenido()
         self._contenido.columnconfigure(0, weight=0)
         self._contenido.columnconfigure(1, weight=1)
 
-        formulario = ttk.LabelFrame(self._contenido, text="Datos del producto", padding=12)
-        formulario.grid(row=0, column=0, sticky="ns", padx=(0, 12))
+        self._formulario = ttk.LabelFrame(self._contenido, text="Datos del producto", padding=12)
+        self._formulario.grid(row=0, column=0, sticky="ns", padx=(0, 12))
         campos = (
             ("Código", self._codigo),
             ("Nombre", self._nombre),
@@ -69,23 +75,26 @@ class MainView(ttk.Frame):
             ("Stock", self._stock),
         )
         for fila, (etiqueta, variable) in enumerate(campos):
-            ttk.Label(formulario, text=f"{etiqueta}:").grid(row=fila, column=0, sticky="w", pady=4)
-            entrada = ttk.Entry(formulario, textvariable=variable, width=24)
+            ttk.Label(self._formulario, text=f"{etiqueta}:").grid(row=fila, column=0, sticky="w", pady=4)
+            entrada = ttk.Entry(self._formulario, textvariable=variable, width=24)
             entrada.grid(row=fila, column=1, sticky="ew", pady=4)
             if etiqueta == "Código":
                 entrada.configure(state="readonly")
-        acciones = ttk.Frame(formulario)
+        acciones = ttk.Frame(self._formulario)
         acciones.grid(row=len(campos), column=0, columnspan=2, pady=(12, 0))
         ttk.Button(acciones, text="Registrar", command=self._registrar).grid(row=0, column=0, padx=2)
         ttk.Button(acciones, text="Cargar", command=self._cargar).grid(row=0, column=1, padx=2)
         ttk.Button(acciones, text="Actualizar", command=self._actualizar).grid(row=1, column=0, padx=2, pady=5)
         ttk.Button(acciones, text="Eliminar", command=self._eliminar).grid(row=1, column=1, padx=2, pady=5)
-        ttk.Button(formulario, text="Limpiar", command=self._limpiar_formulario).grid(
-            row=len(campos) + 1, column=0, columnspan=2
+        ttk.Button(acciones, text="Limpiar", command=self._limpiar_formulario).grid(
+            row=2, column=0, padx=2, pady=5
         )
-        ttk.Label(formulario, textvariable=self._estado, wraplength=190).grid(
-            row=len(campos) + 2, column=0, columnspan=2, pady=(12, 0)
+        ttk.Button(acciones, text="Vender", command=self._vender_producto).grid(
+            row=2, column=1, padx=2, pady=5
         )
+
+        self._estado_label =ttk.Label(self._formulario, textvariable=self._estado, wraplength=190)
+        self._estado_label.grid(row=len(campos) + 2, column=0, columnspan=2, pady=(12, 0))
 
         tabla_frame = ttk.LabelFrame(self._contenido, text="Productos registrados", padding=8)
         tabla_frame.grid(row=0, column=1, sticky="nsew")
@@ -119,8 +128,66 @@ class MainView(ttk.Frame):
                         producto.categoria, producto.stock),
             )
 
+    def _vender_producto(self) -> None:
+        def validar_numeros(texto_nuevo):
+            return texto_nuevo == "" or texto_nuevo.isdigit()
+        if not self._vender_estado:
+            self._estado.set("")
+            
+            producto = self._producto_seleccionado()
+            if producto is None:
+                self._estado.set("Seleccione un producto de la tabla antes de vender.")
+                return
+            
+            vcmd = self._formulario.register(validar_numeros)
+            self._spinbox_label = ttk.Label(self._formulario, text="Ingrese la cantidad a vender:")
+            self._spinbox_label.grid(row=7, column=0, columnspan=2, pady=(12, 0))
+            self._spinbox = tk.Spinbox(
+                self._formulario,
+                from_=1,
+                to=producto.stock,
+                increment=1,
+                validate="key",
+                validatecommand=(vcmd, "%P"),
+                font=("Arial", 10),
+                width=8,
+            )
+            self._spinbox.grid(row=8, column=0, columnspan=2, pady=(12, 0))
+            self._spinbox_button = ttk.Button(
+                self._formulario,
+                text="Listo",
+                command=lambda: self._procesar_venta(self._spinbox.get()),
+            )
+            self._spinbox_button.grid(row=9, column=0, columnspan=2, pady=(12, 0))
+            self._vender_estado = True
+        else:
+            self._vender_estado = False
+            self._spinbox_label.destroy()
+            self._spinbox.destroy()
+            self._spinbox_button.destroy()
+
+    def _procesar_venta(self, cantidad_str: str) -> None:
+        try:
+            cantidad = int(cantidad_str)
+            if cantidad < 1:
+                self._estado.set("La cantidad minima es 1.")
+            elif cantidad > self._producto_seleccionado().stock:
+                self._estado.set("La cantidad excede el stock disponible.")
+            else:
+                self._servicio.vender_producto(
+                    self._usuario_id_actual,
+                    self._producto_seleccionado().codigo,
+                    cantidad,
+                )
+                self._estado.set(f"Venta de {cantidad} unidades realizada correctamente.")
+                self._refrescar_productos()
+                self._vender_producto() # llama la funcion de nuevo para ocultar los widgets de venta
+        except ValueError as error:
+            self._estado.set(str(error))
+
     def _mostrar_usuarios(self) -> None:
         self._limpiar_contenido()
+        self._limpiar_formulario()
         self._contenido.columnconfigure(1, weight=1)
         formulario = ttk.LabelFrame(self._contenido, text="Datos del usuario", padding=12)
         formulario.grid(row=0, column=0, sticky="ns", padx=(0, 12))
@@ -139,7 +206,7 @@ class MainView(ttk.Frame):
         ttk.Button(acciones, text="Cargar", command=self._cargar_usuario).grid(row=0, column=1, padx=2)
         ttk.Button(acciones, text="Actualizar", command=self._actualizar_usuario).grid(row=1, column=0, padx=2, pady=5)
         ttk.Button(acciones, text="Eliminar", command=self._eliminar_usuario).grid(row=1, column=1, padx=2, pady=5)
-        ttk.Button(formulario, text="Limpiar", command=self._limpiar_usuario).grid(
+        ttk.Button(acciones, text="Limpiar", command=self._limpiar_usuario).grid(
             row=4, column=0, columnspan=2
         )
         ttk.Label(formulario, textvariable=self._estado, wraplength=190).grid(
@@ -158,7 +225,21 @@ class MainView(ttk.Frame):
         self._tabla_usuarios = tabla
         for usuario in self._servicio.listar_usuarios():
             tabla.insert("", "end", values=(usuario.identificacion, usuario.nombre, usuario.telefono))
-
+    def mostrar_ventas(self) -> None:
+        self._limpiar_contenido()
+        self._contenido.columnconfigure(0, weight=1)
+        tabla_frame = ttk.LabelFrame(self._contenido, text="Ventas registradas", padding=8)
+        tabla_frame.grid(row=0, column=0, sticky="nsew")
+        tabla_frame.columnconfigure(0, weight=1)
+        tabla_frame.rowconfigure(0, weight=1)
+        tabla = ttk.Treeview(tabla_frame, columns=("usuario", "producto", "cantidad"), show="headings")
+        for columna, texto in (("usuario", "Usuario"), ("producto", "Producto"), ("cantidad", "Cantidad")):
+            tabla.heading(columna, text=texto)
+            tabla.column(columna, width=180, anchor="center")
+        tabla.grid(row=0, column=0, sticky="nsew")
+        self._tabla_ventas = tabla
+        for venta in self._servicio.listar_ventas():
+            tabla.insert("", "end", values=(venta.usuario_id, venta.producto_codigo, venta.cantidad))
     def _usuario_seleccionado(self):
         seleccion = self._tabla_usuarios.selection()
         if not seleccion:
@@ -219,7 +300,21 @@ class MainView(ttk.Frame):
             self._mostrar_usuarios()
         except ValueError as error:
             self._estado.set(str(error))
-
+    def _mostrar_ventas(self) -> None:
+        self._limpiar_contenido()
+        self._contenido.columnconfigure(0, weight=1)
+        tabla_frame = ttk.LabelFrame(self._contenido, text="Ventas registradas", padding=8)
+        tabla_frame.grid(row=0, column=0, sticky="nsew")
+        tabla_frame.columnconfigure(0, weight=1)
+        tabla_frame.rowconfigure(0, weight=1)
+        tabla = ttk.Treeview(tabla_frame, columns=("usuario", "producto", "cantidad"), show="headings")
+        for columna, texto in (("usuario", "Usuario"), ("producto", "Producto"), ("cantidad", "Cantidad")):
+            tabla.heading(columna, text=texto)
+            tabla.column(columna, width=180, anchor="center")
+        tabla.grid(row=0, column=0, sticky="nsew")
+        self._tabla_ventas = tabla
+        for venta in self._servicio.listar_ventas():
+            tabla.insert("", "end", values=(venta.usuario_id, venta.producto_codigo, venta.cantidad))
     def _limpiar_usuario(self) -> None:
         for variable in (self._identificacion_usuario, self._nombre_usuario, self._telefono_usuario):
             variable.set("")
@@ -263,7 +358,10 @@ class MainView(ttk.Frame):
             self._estado.set(str(error))
 
     def _eliminar(self) -> None:
-        codigo = self._codigo.get().strip()
+        codigo = self._producto_seleccionado().codigo if self._producto_seleccionado() else None
+        if codigo is None:
+            self._estado.set("Seleccione un producto de la tabla.")
+            return
         producto = self._servicio.buscar_producto(codigo)
         if producto is None:
             self._estado.set("No se encontró el producto.")

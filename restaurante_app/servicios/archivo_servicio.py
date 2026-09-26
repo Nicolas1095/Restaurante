@@ -105,7 +105,9 @@ class ArchivoServicio:
                 for venta in ventas
             ],
         )
-
+    def listar_ventas(self) -> list[Venta]:
+        return self.cargar_ventas()
+    
     def _cargar(self, nombre_archivo: str) -> list[dict[str, Any]]:
         try:
             with open(self.directorio / nombre_archivo, "r", encoding="utf-8") as archivo:

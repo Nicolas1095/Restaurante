@@ -2,16 +2,25 @@
     {
         "identificacion": "1001",
         "nombre": "Carlos López",
-        "telefono": "3001111111"
+        "telefono": "3001111111",
+        "contrasena": "1234"
     },
     {
         "identificacion": "1002",
         "nombre": "Ana Martínez",
-        "telefono": "3002222222"
+        "telefono": "3002222222",
+        "contrasena": "1234"
     },
     {
-        "identificacion": "1003",
-        "nombre": "Pedro Sánchez",
-        "telefono": "3003333333"
+        "identificacion": "1008",
+        "nombre": "Nombre",
+        "telefono": "Teléfono",
+        "contrasena": "1234"
+    },
+    {
+        "identificacion": "1009",
+        "nombre": "Nombre",
+        "telefono": "Teléfono",
+        "contrasena": "1234"
     }
 ]

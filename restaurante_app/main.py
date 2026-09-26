@@ -1,5 +1,5 @@
 import tkinter as tk
-
+from pathlib import Path
 try:
     from .servicios.restaurante_servicio import RestauranteServicio
     from .ui.login_view import LoginView
@@ -26,15 +26,22 @@ class RestauranteApp:
     def _mostrar_login(self) -> None:
         self._cambiar_vista(LoginView(self._root, self._servicio, self._mostrar_principal))
 
-    def _mostrar_principal(self) -> None:
-        self._cambiar_vista(MainView(self._root, self._servicio, self._mostrar_login))
+    def _mostrar_principal(self, identificacion: str) -> None:
+        self._cambiar_vista(
+            MainView(self._root, self._servicio, identificacion, self._mostrar_login)
+        )
 
 
 def main() -> None:
     root = tk.Tk()
     root.title("Restaurante")
-    root.minsize(620, 400)
+    root.minsize(400, 300)
     RestauranteApp(root, RestauranteServicio())
+    base_dir = Path(__file__).resolve().parent
+    ruta_icono = base_dir / "assets" / "restaurante.png"
+    icono = tk.PhotoImage(file=ruta_icono)
+    icono = icono.subsample(2, 2) 
+    root.iconphoto(True, icono)
     root.mainloop()
 
 

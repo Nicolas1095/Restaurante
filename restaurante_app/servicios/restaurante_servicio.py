@@ -1,4 +1,7 @@
+
+
 try:
+    from ..modelos.venta import Venta
     from .archivo_servicio import ArchivoServicio
     from ..modelos.producto import Producto
     from ..modelos.usuario import Usuario
@@ -6,37 +9,67 @@ except ImportError:
     from servicios.archivo_servicio import ArchivoServicio
     from modelos.producto import Producto
     from modelos.usuario import Usuario
+    from modelos.venta import Venta
 
 
 class RestauranteServicio:
     """Coordina la información que consumen las vistas de la aplicación."""
 
     def __init__(self, archivo_servicio: ArchivoServicio | None = None) -> None:
-        self._archivo_servicio = archivo_servicio or ArchivoServicio()
-        self._productos = self._archivo_servicio.cargar_productos()
-        self._usuarios = self._archivo_servicio.cargar_usuarios()
+        self.nombre = "Restaurante"
+        self.__archivo_servicio = archivo_servicio or ArchivoServicio()
+        self.__productos: list[Producto] = self.__archivo_servicio.cargar_productos()
+        self.__usuarios: list[Usuario] = self.__archivo_servicio.cargar_usuarios()
+        self.__ventas: list[Venta] = self.__archivo_servicio.cargar_ventas()
+                
+        # Índices auxiliares para optimizar búsquedas
+        self.__indice_productos_por_codigo: dict[str, Producto] = {}
+        self.__indice_usuarios_por_id: dict[str, Usuario] = {}
+        self.__indice_ventas_por_usuario: dict[str, list[Venta]] = {}
+                
+        # Reconstruir índices después de cargar desde JSON
+        self.__reconstruir_indices()
 
+    def __reconstruir_indices(self) -> None:
+            """Reconstruye todos los índices auxiliares a partir de las colecciones principales."""
+            # Índice de productos por código
+            self.__indice_productos_por_codigo.clear()
+            for producto in self.__productos:
+                self.__indice_productos_por_codigo[producto.codigo.lower()] = producto
+            
+            # Índice de usuarios por identificación
+            self.__indice_usuarios_por_id.clear()
+            for usuario in self.__usuarios:
+                self.__indice_usuarios_por_id[usuario.identificacion.lower()] = usuario
+            
+            # Índice de ventas por usuario
+            self.__indice_ventas_por_usuario.clear()
+            for venta in self.__ventas:
+                usuario_id = venta.usuario_id.lower()
+                if usuario_id not in self.__indice_ventas_por_usuario:
+                    self.__indice_ventas_por_usuario[usuario_id] = []
+                self.__indice_ventas_por_usuario[usuario_id].append(venta)
     def validar_acceso(self, identificacion: str, contrasena: str) -> bool:
         if not identificacion or not contrasena:
             return False
         return any(
             usuario.identificacion == identificacion
             and usuario.contrasena == contrasena
-            for usuario in self._usuarios
+            for usuario in self.__usuarios
         )
 
     def listar_productos(self):
-        return list(self._productos)
+        return list(self.__productos)
 
     def listar_usuarios(self):
-        return list(self._usuarios)
+        return list(self.__usuarios)
 
     def identificacion_predeterminada(self) -> str:
-        return self._usuarios[0].identificacion if self._usuarios else ""
+        return self.__usuarios[0].identificacion if self.__usuarios else ""
 
     def siguiente_codigo_producto(self) -> str:
         codigos = []
-        for producto in self._productos:
+        for producto in self.__productos:
             if producto.codigo.upper().startswith("P") and producto.codigo[1:].isdigit():
                 codigos.append(int(producto.codigo[1:]))
         return f"P{max(codigos, default=0) + 1:03d}"
@@ -44,7 +77,7 @@ class RestauranteServicio:
     def buscar_usuario(self, identificacion: str) -> Usuario | None:
         criterio = identificacion.strip().lower()
         return next(
-            (usuario for usuario in self._usuarios
+            (usuario for usuario in self.__usuarios
              if usuario.identificacion.lower() == criterio),
             None,
         ) if criterio else None
@@ -54,10 +87,11 @@ class RestauranteServicio:
         if self.buscar_usuario(identificacion):
             raise ValueError("Ya existe un usuario con esa identificación.")
         usuario = Usuario(identificacion, nombre.strip(), telefono.strip(), "1234")
-        self._usuarios.append(usuario)
-        self._archivo_servicio.guardar_usuarios(self._usuarios)
+        self.__usuarios.append(usuario)
+        self.__archivo_servicio.guardar_usuarios(self.__usuarios)
         return usuario
-
+    def listar_ventas(self) -> list[Venta]:
+        return list(self.__ventas)
     def actualizar_usuario(self, identificacion: str, nombre: str, telefono: str) -> Usuario:
         usuario = self.buscar_usuario(identificacion)
         if usuario is None:
@@ -65,15 +99,15 @@ class RestauranteServicio:
         actualizado = Usuario(identificacion.strip(), nombre.strip(), telefono.strip(), usuario.contrasena)
         usuario.nombre = actualizado.nombre
         usuario.telefono = actualizado.telefono
-        self._archivo_servicio.guardar_usuarios(self._usuarios)
+        self.__archivo_servicio.guardar_usuarios(self.__usuarios)
         return usuario
 
     def eliminar_usuario(self, identificacion: str) -> None:
         usuario = self.buscar_usuario(identificacion)
         if usuario is None:
             raise ValueError("No se encontró un usuario con esa identificación.")
-        self._usuarios.remove(usuario)
-        self._archivo_servicio.guardar_usuarios(self._usuarios)
+        self.__usuarios.remove(usuario)
+        self.__archivo_servicio.guardar_usuarios(self.__usuarios)
 
     def buscar_producto(self, identificador: str) -> Producto | None:
         criterio = identificador.strip().lower()
@@ -82,7 +116,7 @@ class RestauranteServicio:
         return next(
             (
                 producto
-                for producto in self._productos
+                for producto in self.__productos
                 if producto.codigo.lower() == criterio or producto.nombre.lower() == criterio
             ),
             None,
@@ -95,9 +129,8 @@ class RestauranteServicio:
         if self.buscar_producto(codigo):
             raise ValueError("Ya existe un producto con ese código.")
         producto = Producto(codigo, nombre.strip(), precio, categoria.strip(), stock)
-        self._productos.append(producto)
-        self._archivo_servicio.guardar_productos(self._productos)
-        return producto
+        self.__productos.append(producto)
+        self.__archivo_servicio.guardar_productos(self.__productos)
 
     def actualizar_producto(
         self,
@@ -117,12 +150,24 @@ class RestauranteServicio:
         producto.precio = actualizado.precio
         producto.categoria = actualizado.categoria
         producto.stock = actualizado.stock
-        self._archivo_servicio.guardar_productos(self._productos)
+        self.__archivo_servicio.guardar_productos(self.__productos)
         return producto
-
+    def vender_producto(self, usuario_id: str, codigo: str, cantidad: int) -> None:
+        if self.buscar_usuario(usuario_id) is None:
+            raise ValueError("No se encontró el usuario de la venta.")
+        producto = self.buscar_producto(codigo)
+        if producto is None:
+            raise ValueError("No se encontró el producto de la venta.")
+        if cantidad > producto.stock:
+            raise ValueError("La cantidad excede el stock disponible.")
+        venta = Venta(usuario_id, codigo, cantidad)
+        producto.stock -= cantidad
+        self.__archivo_servicio.guardar_productos(self.__productos)
+        self.__ventas.append(venta)
+        self.__archivo_servicio.guardar_ventas(self.__ventas)
     def eliminar_producto(self, codigo: str) -> None:
         producto = self.buscar_producto(codigo)
         if producto is None:
             raise ValueError("No se encontró un producto con ese código.")
-        self._productos.remove(producto)
-        self._archivo_servicio.guardar_productos(self._productos)
+        self.__productos.remove(producto)
+        self.__archivo_servicio.guardar_productos(self.__productos)
