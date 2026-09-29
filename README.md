@@ -3,7 +3,6 @@
 Aplicación de restaurante con interfaz gráfica Tkinter. La Semana 14 evoluciona
 la interfaz mediante componentes, contenedores y gestores de geometría para
 consultar usuarios y gestionar productos con persistencia en archivos JSON.
-consultar usuarios y gestionar productos con persistencia en archivos JSON.
 En la Semana 15 se incorpora el registro de ventas asociado al usuario que
 inició sesión y se mejora la pantalla de acceso.
 
@@ -16,12 +15,10 @@ inició sesión y se mejora la pantalla de acceso.
   y usuarios, además del registro y consulta de ventas.
 - `restaurante_app/datos/`: `productos.json`, `usuarios.json` y `ventas.json`.
 - `restaurante_app/ui/login_view.py`: pantalla de usuario, contraseña y
-- `restaurante_app/ui/login_view.py`: pantalla de usuario, contraseña y
   mensajes de validación, imagen de perfil y acceso al registro de usuarios.
--  usuarios, gestionar productos y registrar o consultar ventas.
 - `restaurante_app/ui/main_view.py`: panel organizado con `Frame`,
   `LabelFrame`, `Entry`, `Button`, `Treeview` y `Scrollbar` para consultar
-  usuarios y gestionar productos.
+  usuarios, gestionar productos y consultar ventas.
 - `restaurante_app/main.py`: crea una única ventana `Tk` y coordina las vistas.
 
 ## Flujo de la aplicación
@@ -70,6 +67,21 @@ el usuario, el producto y el stock disponible, descuenta las unidades vendidas
 y guarda los cambios en `productos.json` y `ventas.json`. La sección `Ventas`
 muestra el usuario, el código del producto y la cantidad de cada operación.
 
+## Cambios recientes
+
+- En el login, `Return` permite ingresar desde los campos de usuario o
+  contraseña. En la ventana de registro, permite enviar el formulario desde
+  cualquiera de sus campos.
+- En el formulario de usuarios, `Return` confirma el registro desde los
+  campos de nombre, teléfono o rol.
+- En el panel principal, `Escape` limpia los campos y mensajes, quita las
+  selecciones de las tablas y cierra los controles temporales de venta o
+  cambio de rol, sin borrar los registros guardados.
+- El identificador del usuario nuevo se calcula con el mayor identificador
+  numérico existente, aunque los usuarios no estén ordenados en el JSON. Si
+  se intenta guardar un producto con un código ya ocupado, se asigna el
+  siguiente código disponible.
+
 ## Ejecución
 
 Desde la raíz del repositorio:
@@ -83,9 +95,14 @@ También funciona `python restaurante_app/main.py`.
 ## Comprobación rápida
 
 1. Verificar que aparece la pantalla de acceso.
-2. Ingresar `1001` y `1234`.
-3. Consultar `Productos` y `Usuarios`.
-4. En `Productos`, seleccionar uno, pulsar `Vender` e ingresar una cantidad
+2. Ingresar `1001` y `1234`, probando también `Return` desde el campo de
+  contraseña.
+3. Abrir el registro desde el login y probar `Return` desde uno de sus campos.
+4. Consultar `Productos` y `Usuarios`; en el formulario de usuarios, probar
+  el registro con `Return`.
+5. En el panel, cargar un formulario o abrir una acción temporal y pulsar
+  `Escape`; los datos editables y selecciones deben limpiarse sin borrar filas.
+6. En `Productos`, seleccionar uno, pulsar `Vender` e ingresar una cantidad
   disponible.
-5. Abrir `Ventas` y comprobar que la operación aparece asociada al usuario.
-6. Seleccionar `Cerrar sesión` y comprobar el regreso al login.
+7. Abrir `Ventas` y comprobar que la operación aparece asociada al usuario.
+8. Seleccionar `Cerrar sesión` y comprobar el regreso al login.
