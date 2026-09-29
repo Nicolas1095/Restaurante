@@ -1,16 +1,212 @@
 [
     {
         "codigo": "P001",
-        "nombre": "Hamburgesa Premium XL",
-        "precio": 95000.0,
-        "categoria": "Carnes",
+        "nombre": "Hamburguesa Clásica",
+        "precio": 9.5,
+        "categoria": "Hamburguesas",
         "stock": 40
     },
     {
         "codigo": "P002",
+        "nombre": "Hamburguesa BBQ",
+        "precio": 11.0,
+        "categoria": "Hamburguesas",
+        "stock": 27
+    },
+    {
+        "codigo": "P003",
+        "nombre": "Hamburguesa Doble",
+        "precio": 13.5,
+        "categoria": "Hamburguesas",
+        "stock": 8
+    },
+    {
+        "codigo": "P004",
+        "nombre": "Hamburguesa con Tocino",
+        "precio": 12.0,
+        "categoria": "Hamburguesas",
+        "stock": 30
+    },
+    {
+        "codigo": "P005",
+        "nombre": "Hamburguesa de Pollo",
+        "precio": 10.0,
+        "categoria": "Hamburguesas",
+        "stock": 28
+    },
+    {
+        "codigo": "P006",
         "nombre": "Pizza Margarita",
-        "precio": 67000.0,
+        "precio": 10.5,
         "categoria": "Pizzas",
-        "stock": 44
+        "stock": 14
+    },
+    {
+        "codigo": "P007",
+        "nombre": "Pizza Pepperoni",
+        "precio": 12.0,
+        "categoria": "Pizzas",
+        "stock": 2
+    },
+    {
+        "codigo": "P008",
+        "nombre": "Pizza Hawaiana",
+        "precio": 12.5,
+        "categoria": "Pizzas",
+        "stock": 17
+    },
+    {
+        "codigo": "P009",
+        "nombre": "Pizza Vegetariana",
+        "precio": 11.5,
+        "categoria": "Pizzas",
+        "stock": 15
+    },
+    {
+        "codigo": "P010",
+        "nombre": "Pizza Cuatro Quesos",
+        "precio": 13.0,
+        "categoria": "Pizzas",
+        "stock": 17
+    },
+    {
+        "codigo": "P011",
+        "nombre": "Papas Fritas",
+        "precio": 3.5,
+        "categoria": "Acompañamientos",
+        "stock": 60
+    },
+    {
+        "codigo": "P012",
+        "nombre": "Papas con Queso",
+        "precio": 5.0,
+        "categoria": "Acompañamientos",
+        "stock": 45
+    },
+    {
+        "codigo": "P013",
+        "nombre": "Aros de Cebolla",
+        "precio": 4.5,
+        "categoria": "Acompañamientos",
+        "stock": 35
+    },
+    {
+        "codigo": "P014",
+        "nombre": "Alitas BBQ",
+        "precio": 8.5,
+        "categoria": "Acompañamientos",
+        "stock": 30
+    },
+    {
+        "codigo": "P015",
+        "nombre": "Nuggets de Pollo",
+        "precio": 6.0,
+        "categoria": "Acompañamientos",
+        "stock": 40
+    },
+    {
+        "codigo": "P016",
+        "nombre": "Ensalada César",
+        "precio": 7.5,
+        "categoria": "Ensaladas",
+        "stock": 20
+    },
+    {
+        "codigo": "P017",
+        "nombre": "Ensalada Mediterránea",
+        "precio": 8.0,
+        "categoria": "Ensaladas",
+        "stock": 14
+    },
+    {
+        "codigo": "P018",
+        "nombre": "Ensalada de Pollo",
+        "precio": 9.0,
+        "categoria": "Ensaladas",
+        "stock": 18
+    },
+    {
+        "codigo": "P019",
+        "nombre": "Sopa de Tomate",
+        "precio": 5.5,
+        "categoria": "Sopas",
+        "stock": 25
+    },
+    {
+        "codigo": "P020",
+        "nombre": "Sopa de Pollo",
+        "precio": 6.0,
+        "categoria": "Sopas",
+        "stock": 20
+    },
+    {
+        "codigo": "P021",
+        "nombre": "Coca Cola",
+        "precio": 2.0,
+        "categoria": "Bebidas",
+        "stock": 80
+    },
+    {
+        "codigo": "P022",
+        "nombre": "Sprite",
+        "precio": 2.0,
+        "categoria": "Bebidas",
+        "stock": 70
+    },
+    {
+        "codigo": "P023",
+        "nombre": "Jugo de Naranja",
+        "precio": 3.0,
+        "categoria": "Bebidas",
+        "stock": 40
+    },
+    {
+        "codigo": "P024",
+        "nombre": "Limonada",
+        "precio": 2.5,
+        "categoria": "Bebidas",
+        "stock": 45
+    },
+    {
+        "codigo": "P025",
+        "nombre": "Agua Mineral",
+        "precio": 1.5,
+        "categoria": "Bebidas",
+        "stock": 90
+    },
+    {
+        "codigo": "P026",
+        "nombre": "Café Americano",
+        "precio": 2.5,
+        "categoria": "Bebidas Calientes",
+        "stock": 50
+    },
+    {
+        "codigo": "P027",
+        "nombre": "Capuchino",
+        "precio": 3.5,
+        "categoria": "Bebidas Calientes",
+        "stock": 35
+    },
+    {
+        "codigo": "P028",
+        "nombre": "Tiramisú",
+        "precio": 5.0,
+        "categoria": "Postres",
+        "stock": 20
+    },
+    {
+        "codigo": "P029",
+        "nombre": "Cheesecake",
+        "precio": 4.5,
+        "categoria": "Postres",
+        "stock": 25
+    },
+    {
+        "codigo": "P030",
+        "nombre": "Brownie con Helado",
+        "precio": 5.5,
+        "categoria": "Postres",
+        "stock": 18
     }
 ]

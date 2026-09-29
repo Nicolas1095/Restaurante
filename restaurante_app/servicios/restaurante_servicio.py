@@ -73,6 +73,14 @@ class RestauranteServicio:
             if producto.codigo.upper().startswith("P") and producto.codigo[1:].isdigit():
                 codigos.append(int(producto.codigo[1:]))
         return f"P{max(codigos, default=0) + 1:03d}"
+    
+    def siguiente_codigo_usuario(self) -> str:
+        identificaciones = [
+            int(usuario.identificacion.strip())
+            for usuario in self.__usuarios
+            if usuario.identificacion.strip().isdigit()
+        ]
+        return str(max(identificaciones, default=1000) + 1)
 
     def buscar_usuario(self, identificacion: str) -> Usuario | None:
         criterio = identificacion.strip().lower()
@@ -82,23 +90,33 @@ class RestauranteServicio:
             None,
         ) if criterio else None
 
-    def registrar_usuario(self, identificacion: str, nombre: str, telefono: str) -> Usuario:
-        identificacion = identificacion.strip()
-        if self.buscar_usuario(identificacion):
-            raise ValueError("Ya existe un usuario con esa identificación.")
-        usuario = Usuario(identificacion, nombre.strip(), telefono.strip(), "1234")
+    def registrar_usuario(self, nombre: str, telefono: int, contrasena: str, rol = "Cliente") -> Usuario:
+        identificacion = self.siguiente_codigo_usuario()
+        telefono = str(telefono)
+        while self.buscar_usuario(identificacion):
+            identificacion = str(int(identificacion) + 1)
+        usuario = Usuario(identificacion, nombre.strip(), telefono.strip(), contrasena.strip(), rol.strip())
         self.__usuarios.append(usuario)
         self.__archivo_servicio.guardar_usuarios(self.__usuarios)
         return usuario
     def listar_ventas(self) -> list[Venta]:
         return list(self.__ventas)
-    def actualizar_usuario(self, identificacion: str, nombre: str, telefono: str) -> Usuario:
+    def actualizar_usuario(self, identificacion: str, nombre: str, telefono: str, rol: str) -> Usuario:
         usuario = self.buscar_usuario(identificacion)
         if usuario is None:
             raise ValueError("No se encontró un usuario con esa identificación.")
-        actualizado = Usuario(identificacion.strip(), nombre.strip(), telefono.strip(), usuario.contrasena)
+        if usuario.identificacion == "1001" and usuario.rol != rol.strip():
+            raise ValueError("No se puede cambiar el rol del usuario 1001.")
+        actualizado = Usuario(
+            identificacion.strip(),
+            nombre.strip(),
+            telefono.strip(),
+            usuario.contrasena,
+            rol.strip(),
+        )
         usuario.nombre = actualizado.nombre
         usuario.telefono = actualizado.telefono
+        usuario.rol = actualizado.rol
         self.__archivo_servicio.guardar_usuarios(self.__usuarios)
         return usuario
 
@@ -106,6 +124,8 @@ class RestauranteServicio:
         usuario = self.buscar_usuario(identificacion)
         if usuario is None:
             raise ValueError("No se encontró un usuario con esa identificación.")
+        if usuario.identificacion == "1001":
+            raise ValueError("No se puede eliminar el usuario 1001.")
         self.__usuarios.remove(usuario)
         self.__archivo_servicio.guardar_usuarios(self.__usuarios)
 
@@ -126,11 +146,15 @@ class RestauranteServicio:
         self, codigo: str, nombre: str, precio: float, categoria: str, stock: int
     ) -> Producto:
         codigo = codigo.strip()
-        if self.buscar_producto(codigo):
-            raise ValueError("Ya existe un producto con ese código.")
+        codigos_existentes = {producto.codigo.strip().casefold() for producto in self.__productos}
+        if codigo.casefold() in codigos_existentes:
+            codigo = self.siguiente_codigo_producto()
+            while codigo.casefold() in codigos_existentes:
+                codigo = f"P{int(codigo[1:]) + 1:03d}"
         producto = Producto(codigo, nombre.strip(), precio, categoria.strip(), stock)
         self.__productos.append(producto)
         self.__archivo_servicio.guardar_productos(self.__productos)
+        return producto
 
     def actualizar_producto(
         self,
@@ -152,7 +176,7 @@ class RestauranteServicio:
         producto.stock = actualizado.stock
         self.__archivo_servicio.guardar_productos(self.__productos)
         return producto
-    def vender_producto(self, usuario_id: str, codigo: str, cantidad: int) -> None:
+    def vender_producto(self, usuario_id: str, codigo: str, cantidad: int, precio: float) -> None:
         if self.buscar_usuario(usuario_id) is None:
             raise ValueError("No se encontró el usuario de la venta.")
         producto = self.buscar_producto(codigo)
@@ -160,7 +184,7 @@ class RestauranteServicio:
             raise ValueError("No se encontró el producto de la venta.")
         if cantidad > producto.stock:
             raise ValueError("La cantidad excede el stock disponible.")
-        venta = Venta(usuario_id, codigo, cantidad)
+        venta = Venta(usuario_id, codigo, cantidad, precio)
         producto.stock -= cantidad
         self.__archivo_servicio.guardar_productos(self.__productos)
         self.__ventas.append(venta)

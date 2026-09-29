@@ -4,15 +4,14 @@ class Usuario:
         identificacion: str,
         nombre: str | None = None,
         telefono: str | None = None,
-        contrasena: str = "1234",
+        contrasena: str | None = None,
+        rol: str | None = None,
     ):
-        if telefono is None:
-            telefono = nombre
-            nombre = identificacion
         self.identificacion = identificacion
         self.nombre = nombre
         self.telefono = telefono
         self.contrasena = contrasena
+        self.rol = rol
 
     @property
     def identificacion(self) -> str:
@@ -53,6 +52,15 @@ class Usuario:
         if not contrasena:
             raise ValueError("La contraseña no puede estar vacía.")
         self.__contrasena = contrasena
+
+    @property
+    def rol(self) -> str:
+        return self.__rol
+    @rol.setter
+    def rol(self, rol: str) -> None:
+        if not rol:
+            raise ValueError("El rol no puede estar vacio.")
+        self.__rol = rol
     
     def mostrar_informacion(self) -> str:
         return f"{self.nombre} - {self.telefono}"

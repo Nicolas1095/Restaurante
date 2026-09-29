@@ -27,15 +27,16 @@ class RestauranteApp:
         self._cambiar_vista(LoginView(self._root, self._servicio, self._mostrar_principal))
 
     def _mostrar_principal(self, identificacion: str) -> None:
+        self._usuario = self._servicio.buscar_usuario(identificacion)
         self._cambiar_vista(
-            MainView(self._root, self._servicio, identificacion, self._mostrar_login)
+            MainView(self._root, self._servicio, self._usuario, self._mostrar_login)
         )
 
 
 def main() -> None:
     root = tk.Tk()
     root.title("Restaurante")
-    root.minsize(400, 300)
+    root.minsize(680, 620)
     RestauranteApp(root, RestauranteServicio())
     base_dir = Path(__file__).resolve().parent
     ruta_icono = base_dir / "assets" / "restaurante.png"

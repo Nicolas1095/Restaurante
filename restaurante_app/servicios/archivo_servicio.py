@@ -42,7 +42,8 @@ class ArchivoServicio:
                         registro["identificacion"],
                         registro["nombre"],
                         registro["telefono"],
-                        registro.get("contrasena", "1234"),
+                        registro["contrasena"],
+                        registro["rol"]
                     )
                 )
             except (KeyError, TypeError, ValueError):
@@ -58,6 +59,8 @@ class ArchivoServicio:
                         registro["usuario_id"],
                         registro["producto_codigo"],
                         registro["cantidad"],
+                        registro["precio"],
+                        registro["total"]
                     )
                 )
             except (KeyError, TypeError, ValueError):
@@ -88,6 +91,7 @@ class ArchivoServicio:
                     "nombre": usuario.nombre,
                     "telefono": usuario.telefono,
                     "contrasena": usuario.contrasena,
+                    "rol": usuario.rol
                 }
                 for usuario in usuarios
             ],
@@ -101,6 +105,8 @@ class ArchivoServicio:
                     "usuario_id": venta.usuario_id,
                     "producto_codigo": venta.producto_codigo,
                     "cantidad": venta.cantidad,
+                    "precio" : venta.precio,
+                    "total" : venta.total,
                 }
                 for venta in ventas
             ],
