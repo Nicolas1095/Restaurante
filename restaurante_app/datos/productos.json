@@ -4,19 +4,19 @@
         "nombre": "Hamburguesa Clásica",
         "precio": 9.5,
         "categoria": "Hamburguesas",
-        "stock": 40
+        "stock": 36
     },
     {
         "codigo": "P002",
         "nombre": "Hamburguesa BBQ",
         "precio": 11.0,
         "categoria": "Hamburguesas",
-        "stock": 27
+        "stock": 25
     },
     {
         "codigo": "P003",
         "nombre": "Hamburguesa Doble",
-        "precio": 13.5,
+        "precio": 50.0,
         "categoria": "Hamburguesas",
         "stock": 8
     },
@@ -25,7 +25,7 @@
         "nombre": "Hamburguesa con Tocino",
         "precio": 12.0,
         "categoria": "Hamburguesas",
-        "stock": 30
+        "stock": 28
     },
     {
         "codigo": "P005",
@@ -39,7 +39,7 @@
         "nombre": "Pizza Margarita",
         "precio": 10.5,
         "categoria": "Pizzas",
-        "stock": 14
+        "stock": 13
     },
     {
         "codigo": "P007",
@@ -53,28 +53,28 @@
         "nombre": "Pizza Hawaiana",
         "precio": 12.5,
         "categoria": "Pizzas",
-        "stock": 17
+        "stock": 13
     },
     {
         "codigo": "P009",
         "nombre": "Pizza Vegetariana",
         "precio": 11.5,
         "categoria": "Pizzas",
-        "stock": 15
+        "stock": 9
     },
     {
         "codigo": "P010",
         "nombre": "Pizza Cuatro Quesos",
         "precio": 13.0,
         "categoria": "Pizzas",
-        "stock": 17
+        "stock": 13
     },
     {
         "codigo": "P011",
         "nombre": "Papas Fritas",
         "precio": 3.5,
         "categoria": "Acompañamientos",
-        "stock": 60
+        "stock": 0
     },
     {
         "codigo": "P012",

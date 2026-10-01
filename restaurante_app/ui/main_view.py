@@ -146,7 +146,7 @@ class MainView(tk.Frame):
         ttk.Button(navegacion, text="Productos", command=self._mostrar_productos, style="Blue.TButton").pack(
             side="left", padx=(0, 6)
         )
-        if self._usuario_actual != "Cliente":
+        if self._usuario_actual.rol != "Cliente":
             ttk.Button(navegacion, text="Usuarios", command=self._mostrar_usuarios, style="Blue.TButton").pack(
                 side="left", padx=6
             )
@@ -233,8 +233,10 @@ class MainView(tk.Frame):
                 row=2, column=1, padx=2, pady=5
             )
         else:
-            ttk.Button(acciones, text="Comprar", command=self._vender_producto).grid(
-                row=2, column=1, padx=2, pady=5
+            self._formulario.columnconfigure(0, weight=1, minsize=40)
+            self._formulario.columnconfigure(1, weight=1, minsize=60)
+            ttk.Button(self._formulario, text="Comprar", command=self._vender_producto).grid(
+                row=0, column=0, columnspan=2, pady=(28, 0)
             )
 
         color_estado = "#00aa00" if self._mensaje_estado else "#ff0000"
@@ -290,7 +292,7 @@ class MainView(tk.Frame):
             if producto is None:
                 self._establecer_estado("Seleccione un producto de la tabla.", False)
                 return
-            
+            self._estado_label.grid_forget()
             vcmd = self._formulario.register(validar_numeros)
             self._spinbox_label = ttk.Label(self._formulario, text="Ingrese la cantidad:")
             self._spinbox_label.grid(row=7, column=0, columnspan=2, pady=(12, 0))
@@ -328,7 +330,7 @@ class MainView(tk.Frame):
             self._spinbox_label.destroy()
             self._spinbox.destroy()
             self._spinbox_button.destroy()
-
+        self._estado_label.grid(row=10, column=0, columnspan=2, pady=(12, 0))
     def _procesar_venta(self, cantidad_str: str) -> None:
         try:
             cantidad = int(cantidad_str)
@@ -343,7 +345,6 @@ class MainView(tk.Frame):
                     self._producto_seleccionado().codigo,
                     cantidad,
                     self._producto_seleccionado().precio,
-                    total
                 )
                 self._establecer_estado(
                     f"Venta de {cantidad} unidades por "

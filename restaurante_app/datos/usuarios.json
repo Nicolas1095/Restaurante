@@ -10,7 +10,7 @@
         "identificacion": "1002",
         "nombre": "Juan",
         "telefono": "255556848",
-        "contrasena": "0992664881",
+        "contrasena": "1234",
         "rol": "Cliente"
     },
     {
@@ -25,6 +25,6 @@
         "nombre": "Pedro",
         "telefono": "88949849888",
         "contrasena": "5988889",
-        "rol": "Cliente"
+        "rol": "Administrador"
     }
 ]

@@ -184,7 +184,8 @@ class RestauranteServicio:
             raise ValueError("No se encontró el producto de la venta.")
         if cantidad > producto.stock:
             raise ValueError("La cantidad excede el stock disponible.")
-        venta = Venta(usuario_id, codigo, cantidad, precio)
+        total_venta = cantidad * precio
+        venta = Venta(usuario_id, codigo, cantidad, precio, total_venta)
         producto.stock -= cantidad
         self.__archivo_servicio.guardar_productos(self.__productos)
         self.__ventas.append(venta)

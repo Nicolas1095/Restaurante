@@ -12,5 +12,68 @@
         "cantidad": 11,
         "precio": 12.0,
         "total": 132.0
+    },
+    {
+        "usuario_id": "1001",
+        "producto_codigo": "P008",
+        "cantidad": 4,
+        "precio": 12.5,
+        "total": 50.0
+    },
+    {
+        "usuario_id": "1001",
+        "producto_codigo": "P009",
+        "cantidad": 1,
+        "precio": 11.5,
+        "total": 11.5
+    },
+    {
+        "usuario_id": "1001",
+        "producto_codigo": "P011",
+        "cantidad": 60,
+        "precio": 3.5,
+        "total": 210.0
+    },
+    {
+        "usuario_id": "1002",
+        "producto_codigo": "P001",
+        "cantidad": 4,
+        "precio": 9.5,
+        "total": 38.0
+    },
+    {
+        "usuario_id": "1002",
+        "producto_codigo": "P004",
+        "cantidad": 2,
+        "precio": 12.0,
+        "total": 24.0
+    },
+    {
+        "usuario_id": "1002",
+        "producto_codigo": "P002",
+        "cantidad": 2,
+        "precio": 11.0,
+        "total": 22.0
+    },
+    {
+        "usuario_id": "1002",
+        "producto_codigo": "P006",
+        "cantidad": 1,
+        "precio": 10.5,
+        "total": 10.5
+    },
+    {
+        "usuario_id": "1001",
+        "producto_codigo": "P010",
+        "cantidad": 4,
+        "precio": 13.0,
+        "total": 52.0
+    },
+    {
+        "usuario_id": "1001",
+        "producto_codigo": "P009",
+        "cantidad": 5,
+        "precio": 11.5,
+        "total": 57.5
     }
 ]
