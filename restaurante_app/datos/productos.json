@@ -208,5 +208,12 @@
         "precio": 5.5,
         "categoria": "Postres",
         "stock": 18
+    },
+    {
+        "codigo": "P031",
+        "nombre": "Hamburguesa Triple",
+        "precio": 6767.0,
+        "categoria": "Hamburguesas",
+        "stock": 6767
     }
 ]

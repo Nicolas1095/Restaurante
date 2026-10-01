@@ -332,6 +332,7 @@ class MainView(tk.Frame):
     def _procesar_venta(self, cantidad_str: str) -> None:
         try:
             cantidad = int(cantidad_str)
+            total = cantidad * self._producto_seleccionado().precio
             if cantidad < 1:
                 self._establecer_estado("La cantidad minima es 1.")
             elif cantidad > self._producto_seleccionado().stock:
@@ -341,11 +342,12 @@ class MainView(tk.Frame):
                     self._usuario_actual.identificacion,
                     self._producto_seleccionado().codigo,
                     cantidad,
-                    self._producto_seleccionado().precio
+                    self._producto_seleccionado().precio,
+                    total
                 )
                 self._establecer_estado(
                     f"Venta de {cantidad} unidades por "
-                    f"{self._producto_seleccionado().precio * cantidad}$ realizada correctamente",
+                    f"{total}$ realizada correctamente",
                     True,
                 )
                 self._refrescar_productos()
